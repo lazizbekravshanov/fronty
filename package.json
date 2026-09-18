@@ -1,0 +1,39 @@
+{
+  "name": "fronty",
+  "version": "0.0.0",
+  "description": "A cool library of old school",
+  "license": "MIT",
+  "author": "Lazizbek Ravshanov",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/fronty.js",
+  "module": "./dist/fronty.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/fronty.js"
+    },
+    "./styles.css": "./dist/fronty.css"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1"
+  }
+}

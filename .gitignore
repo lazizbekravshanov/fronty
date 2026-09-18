@@ -1,0 +1,23 @@
+# deps and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# local only: prompt/spec files and credentials never go to the remote
+PROMPT.md
+PROMPT*.md
+prompt*.md
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*
+secrets*
+
+# os / editor
+.DS_Store
+.vscode/
+.idea/
+*.log
