@@ -132,7 +132,6 @@
 
   /* Menu extras */
   [data-slot="menu-item-icon"] { display: flex; }
-  [data-slot="menu-item-shortcut"] { font: inherit; font-size: var(--fy-text-xs); color: var(--fy-fg-muted); }
   [data-slot="menu-separator"] { height: 1px; margin: var(--fy-space-1) var(--fy-space-2); }
   [data-slot="menu-label"] { padding: 6px var(--fy-space-3) 2px; font-size: var(--fy-text-xs); font-weight: 600; color: var(--fy-fg-muted); }
 

@@ -8,7 +8,7 @@ import { Button } from "../registry/ui/button";
 import { Card, CardBody, CardDescription, CardFooter, CardHeader, CardTitle } from "../registry/ui/card";
 import { Checkbox } from "../registry/ui/checkbox";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from "../registry/ui/dialog";
-import { ContextMenuTrigger, Menu, MenuContent, MenuItem, MenuLabel, MenuSeparator, MenuTrigger } from "../registry/ui/menu";
+import { Menu, MenuContent, MenuItem, MenuLabel, MenuSeparator, MenuTrigger } from "../registry/ui/menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../registry/ui/popover";
 import { Select } from "../registry/ui/select";
 import { Slider } from "../registry/ui/slider";
@@ -140,12 +140,12 @@ export function App() {
                   <MoreIcon /> Menu
                 </MenuTrigger>
                 <MenuContent>
-                  <MenuLabel>File</MenuLabel>
-                  <MenuItem shortcut="⌘N" onSelect={() => toast("New file")}>New</MenuItem>
-                  <MenuItem shortcut="⌘D" onSelect={() => toast("Duplicated")}>Duplicate</MenuItem>
+                  <MenuLabel>Project</MenuLabel>
+                  <MenuItem onSelect={() => toast("Renamed")}>Rename</MenuItem>
+                  <MenuItem onSelect={() => toast("Duplicated")}>Duplicate</MenuItem>
                   <MenuItem disabled>Share…</MenuItem>
                   <MenuSeparator />
-                  <MenuItem variant="danger" onSelect={() => toast.error("Moved to trash")}>Move to trash</MenuItem>
+                  <MenuItem variant="danger" onSelect={() => toast.error("Project deleted")}>Delete</MenuItem>
                 </MenuContent>
               </Menu>
 
@@ -166,12 +166,12 @@ export function App() {
               <Dialog>
                 <DialogTrigger>Dialog</DialogTrigger>
                 <DialogContent>
-                  <DialogTitle>Empty the trash?</DialogTitle>
-                  <DialogDescription>12 items will be gone for good. This can't be undone.</DialogDescription>
+                  <DialogTitle>Delete this project?</DialogTitle>
+                  <DialogDescription>12 pages will be gone for good. This can't be undone.</DialogDescription>
                   <DialogFooter>
                     <DialogClose>Cancel</DialogClose>
-                    <DialogClose data-variant="danger" onClick={() => toast.success("Trash emptied")}>
-                      Empty trash
+                    <DialogClose data-variant="danger" onClick={() => toast.success("Project deleted")}>
+                      Delete
                     </DialogClose>
                   </DialogFooter>
                 </DialogContent>
@@ -180,8 +180,8 @@ export function App() {
               <Button
                 variant="primary"
                 onClick={() =>
-                  toast.success("Saved to Desktop", {
-                    description: "fronty-v1.fig",
+                  toast.success("Changes saved", {
+                    description: "Your profile is up to date.",
                     action: { label: "Undo", onClick: () => toast("Undone") },
                   })
                 }
@@ -189,17 +189,6 @@ export function App() {
                 Toast
               </Button>
             </CardBody>
-            <Menu>
-              <ContextMenuTrigger className="grid h-24 place-items-center rounded-fy-md border border-dashed border-fy-border text-sm text-fy-fg-muted">
-                Right click here
-              </ContextMenuTrigger>
-              <MenuContent>
-                <MenuItem onSelect={() => toast("Get info")}>Get Info</MenuItem>
-                <MenuItem onSelect={() => toast("Renamed")}>Rename</MenuItem>
-                <MenuSeparator />
-                <MenuItem onSelect={() => toast("Copied")} shortcut="⌘C">Copy</MenuItem>
-              </MenuContent>
-            </Menu>
           </Card>
         </div>
       </div>

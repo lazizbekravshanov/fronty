@@ -5,7 +5,7 @@ Status: v1 (Now era, `liquid`) built
 
 ## What fronty is
 
-A copy-paste React component library that brings old UI back to life with cool minimalism. Every component comes in era themes, from 1984 Mac to 2026 liquid glass. People run `npx fronty add button` and the source lands in their project, so they own it and can change anything. Lighter than shadcn: zero runtime dependencies besides React.
+A copy-paste React component library for the web that brings old UI back to life with cool minimalism. Every component comes in era themes, from 1984 Mac to 2026 liquid glass. People run `npx fronty add button` and the source lands in their project, so they own it and can change anything. Lighter than shadcn: zero runtime dependencies besides React.
 
 ## Decisions
 
@@ -73,7 +73,7 @@ Light and dark both ship; dark follows `prefers-color-scheme` unless `data-mode=
 - **Slider**: native range input, fill via a `--fy-slider-fill` custom property.
 - **Select**: button + listbox in a popover. Keyboard: arrows, Home/End, typeahead, Enter/Space, Escape. Hidden input for forms. Controlled or uncontrolled.
 - **Tabs**: segmented control style; roving focus, arrows move and activate.
-- **Menu**: trigger + popover menu, `menuitem` roles, roving focus, typeahead, closes on select. Context menu variant opens at the pointer.
+- **Menu**: trigger + popover dropdown, `menuitem` roles, roving focus, typeahead, closes on select.
 - **Dialog**: native `<dialog>` with `showModal()`; Escape and backdrop click close; returns focus.
 - **Popover**: Popover API, positioned by `useAnchorPosition` (flip + shift inside viewport).
 - **Tooltip**: `popover="manual"`, opened on hover (after a delay) and focus (right away), closed on leave, blur and Escape.
@@ -90,4 +90,4 @@ Vitest + Testing Library in jsdom for behavior and a11y wiring of every componen
 
 ## Out of scope for v1
 
-Other themes, Code Connect, a docs website, RTL polish, form library integrations, nesting different themes inside each other (selectors are scoped with `:where([data-theme])` today; `@scope` can fence themes later).
+Other themes, Code Connect, desktop app patterns (right click context menus, keyboard shortcut hints, windows, menu bars, docks; fronty is web only), a docs website, RTL polish, form library integrations, nesting different themes inside each other (selectors are scoped with `:where([data-theme])` today; `@scope` can fence themes later).

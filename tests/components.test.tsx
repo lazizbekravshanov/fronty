@@ -7,7 +7,7 @@ import { Button } from "../registry/ui/button";
 import { Card, CardTitle } from "../registry/ui/card";
 import { Checkbox } from "../registry/ui/checkbox";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "../registry/ui/dialog";
-import { ContextMenuTrigger, Menu, MenuContent, MenuItem, MenuTrigger } from "../registry/ui/menu";
+import { Menu, MenuContent, MenuItem, MenuTrigger } from "../registry/ui/menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../registry/ui/popover";
 import { Select } from "../registry/ui/select";
 import { Slider } from "../registry/ui/slider";
@@ -158,18 +158,6 @@ describe("Menu", () => {
     expect(document.activeElement).toBe(trigger);
   });
 
-  it("context menu opens on right click", async () => {
-    render(
-      <Menu>
-        <ContextMenuTrigger>Right click me</ContextMenuTrigger>
-        <MenuContent>
-          <MenuItem>Info</MenuItem>
-        </MenuContent>
-      </Menu>,
-    );
-    await userEvent.pointer({ keys: "[MouseRight]", target: screen.getByText("Right click me") });
-    expect(isOpen(screen.getByRole("menu", { hidden: true }))).toBe(true);
-  });
 });
 
 describe("Popover", () => {

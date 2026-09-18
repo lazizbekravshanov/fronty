@@ -3,16 +3,9 @@ import { useLayoutEffect, type RefObject } from "react";
 export type Side = "top" | "bottom" | "left" | "right";
 export type Align = "start" | "center" | "end";
 export type Placement = Side | `${Side}-${Exclude<Align, "center">}`;
-export type Anchor = RefObject<HTMLElement | null> | { x: number; y: number } | null;
 
 const GAP = 6;
 const MARGIN = 8;
-
-function rectOf(anchor: Anchor): DOMRect | null {
-  if (!anchor) return null;
-  if ("current" in anchor) return anchor.current?.getBoundingClientRect() ?? null;
-  return new DOMRect(anchor.x, anchor.y, 0, 0);
-}
 
 const opposite: Record<Side, Side> = { top: "bottom", bottom: "top", left: "right", right: "left" };
 
@@ -47,12 +40,12 @@ export function computePosition(
 
 /**
  * Positions a floating element (a popover in the top layer, so `position: fixed`)
- * next to an anchor element or point. Flips to the other side when there is no
+ * next to an anchor element. Flips to the other side when there is no
  * room and shifts to stay inside the viewport. `matchWidth` sets a min-width
  * equal to the anchor (used by Select).
  */
 export function useAnchorPosition(
-  anchor: Anchor,
+  anchor: RefObject<HTMLElement | null>,
   floating: RefObject<HTMLElement | null>,
   open: boolean,
   placement: Placement = "bottom-start",
@@ -62,7 +55,7 @@ export function useAnchorPosition(
     const el = floating.current;
     if (!open || !el) return;
     const update = () => {
-      const a = rectOf(anchor);
+      const a = anchor.current?.getBoundingClientRect();
       if (!a) return;
       if (matchWidth) el.style.minWidth = `${a.width}px`;
       const f = el.getBoundingClientRect();

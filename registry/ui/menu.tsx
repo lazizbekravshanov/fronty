@@ -6,11 +6,10 @@ import {
   useState,
   type HTMLAttributes,
   type KeyboardEvent,
-  type MouseEvent,
   type ReactNode,
   type RefObject,
 } from "react";
-import { useAnchorPosition, type Anchor, type Placement } from "../hooks/use-anchor-position";
+import { useAnchorPosition, type Placement } from "../hooks/use-anchor-position";
 import { useListNavigation } from "../hooks/use-list-navigation";
 import { usePopover } from "../hooks/use-popover";
 import { cn } from "../lib/cn";
@@ -20,8 +19,6 @@ interface MenuContext {
   setOpen: (open: boolean) => void;
   id: string;
   trigger: RefObject<HTMLButtonElement | null>;
-  point: { x: number; y: number } | null;
-  setPoint: (p: { x: number; y: number } | null) => void;
 }
 const Ctx = createContext<MenuContext | null>(null);
 const useMenu = () => {
@@ -36,10 +33,9 @@ export interface MenuProps {
   children: ReactNode;
 }
 
-/** Dropdown menu root. Pair with <MenuTrigger> or <ContextMenuTrigger>, then <MenuContent>. */
+/** Dropdown menu root. Pair with <MenuTrigger> and <MenuContent>. */
 export function Menu({ open: controlled, onOpenChange, children }: MenuProps) {
   const [inner, setInner] = useState(false);
-  const [point, setPoint] = useState<{ x: number; y: number } | null>(null);
   const open = controlled ?? inner;
   const setOpen = (next: boolean) => {
     if (next === open) return;
@@ -48,11 +44,11 @@ export function Menu({ open: controlled, onOpenChange, children }: MenuProps) {
   };
   const id = useId();
   const trigger = useRef<HTMLButtonElement>(null);
-  return <Ctx.Provider value={{ open, setOpen, id, trigger, point, setPoint }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ open, setOpen, id, trigger }}>{children}</Ctx.Provider>;
 }
 
 export function MenuTrigger({ className, onKeyDown, ...props }: HTMLAttributes<HTMLButtonElement>) {
-  const { open, setOpen, id, trigger, setPoint } = useMenu();
+  const { open, setOpen, id, trigger } = useMenu();
   return (
     <button
       ref={trigger}
@@ -65,33 +61,12 @@ export function MenuTrigger({ className, onKeyDown, ...props }: HTMLAttributes<H
       data-variant="secondary"
       data-size="md"
       className={cn("fy-button", className)}
-      onPointerDown={() => setPoint(null)}
       onKeyDown={(e) => {
         onKeyDown?.(e);
         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
-          setPoint(null);
           setOpen(true);
         }
-      }}
-      {...props}
-    />
-  );
-}
-
-/** Opens the menu at the pointer on right click (or the context menu key). */
-export function ContextMenuTrigger({ className, onContextMenu, ...props }: HTMLAttributes<HTMLDivElement>) {
-  const { setOpen, setPoint } = useMenu();
-  return (
-    <div
-      data-slot="context-menu-trigger"
-      className={className}
-      onContextMenu={(e: MouseEvent<HTMLDivElement>) => {
-        onContextMenu?.(e);
-        if (e.defaultPrevented) return;
-        e.preventDefault();
-        setPoint({ x: e.clientX, y: e.clientY });
-        setOpen(true);
       }}
       {...props}
     />
@@ -103,15 +78,14 @@ export interface MenuContentProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function MenuContent({ placement = "bottom-start", className, onKeyDown, ...props }: MenuContentProps) {
-  const { open, setOpen, id, trigger, point } = useMenu();
+  const { open, setOpen, id, trigger } = useMenu();
   const ref = useRef<HTMLDivElement>(null);
   const nav = useListNavigation(ref, { itemSelector: '[role="menuitem"]', typeahead: true });
   usePopover(ref, open, (next) => {
     setOpen(next);
     if (next) requestAnimationFrame(nav.focusFirst);
   });
-  const anchor: Anchor = point ?? trigger;
-  useAnchorPosition(anchor, ref, open, point ? "bottom-start" : placement);
+  useAnchorPosition(trigger, ref, open, placement);
 
   return (
     <div
@@ -138,18 +112,16 @@ export interface MenuItemProps extends Omit<HTMLAttributes<HTMLDivElement>, "onS
   onSelect?: () => void;
   disabled?: boolean;
   icon?: ReactNode;
-  /** Keyboard hint shown on the right, for example "⌘C". */
-  shortcut?: string;
   variant?: "default" | "danger";
 }
 
-export function MenuItem({ onSelect, disabled, icon, shortcut, variant = "default", className, children, ...props }: MenuItemProps) {
-  const { setOpen, trigger, point } = useMenu();
+export function MenuItem({ onSelect, disabled, icon, variant = "default", className, children, ...props }: MenuItemProps) {
+  const { setOpen, trigger } = useMenu();
   const activate = () => {
     if (disabled) return;
     onSelect?.();
     setOpen(false);
-    if (!point) trigger.current?.focus();
+    trigger.current?.focus();
   };
   return (
     <div
@@ -170,7 +142,6 @@ export function MenuItem({ onSelect, disabled, icon, shortcut, variant = "defaul
     >
       {icon && <span data-slot="menu-item-icon">{icon}</span>}
       <span data-slot="menu-item-label">{children}</span>
-      {shortcut && <kbd data-slot="menu-item-shortcut">{shortcut}</kbd>}
     </div>
   );
 }

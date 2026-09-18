@@ -132,7 +132,6 @@
     background: var(--fy-accent);
     color: var(--fy-accent-fg);
   }
-  :where([data-theme="liquid"]) [data-slot="menu-item"]:is(:hover, :focus) [data-slot="menu-item-shortcut"] { color: inherit; opacity: 0.8; }
   :where([data-theme="liquid"]) [data-slot="menu-item"][data-variant="danger"]:not(:hover, :focus) { color: var(--fy-danger); }
   :where([data-theme="liquid"]) [data-slot="menu-item"][data-variant="danger"]:is(:hover, :focus) { background: var(--fy-danger); }
   :where([data-theme="liquid"]) [data-slot="menu-separator"] { background: var(--fy-border); }

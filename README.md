@@ -2,7 +2,7 @@
 
 Old UI, brought back to life with cool minimalism.
 
-fronty is a copy-paste React component library with **era themes**. You run one command, the component's source lands in your project, and it's yours to change. No runtime dependencies besides React: menus, dialogs, popovers and tooltips are built on the browser's own `<dialog>` and Popover API.
+fronty is a copy-paste React component library for the web with **era themes**. You run one command, the component's source lands in your project, and it's yours to change. No runtime dependencies besides React: menus, dialogs, popovers and tooltips are built on the browser's own `<dialog>` and Popover API.
 
 | Era | Themes | Status |
 |---|---|---|
@@ -40,7 +40,7 @@ import { Button } from "@/components/fronty/ui/button";
 
 ## Components (v1)
 
-Button · TextField · Checkbox · Switch · Slider · Select · Tabs · Menu (dropdown + context) · Dialog · Popover · Tooltip · Toast · Card, plus 14 icons.
+Button · TextField · Checkbox · Switch · Slider · Select · Tabs · Menu · Dialog · Popover · Tooltip · Toast · Card, plus 14 icons.
 
 ## Customizing
 
