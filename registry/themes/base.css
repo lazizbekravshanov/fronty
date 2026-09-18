@@ -1,0 +1,207 @@
+/*
+ * fronty base: structure shared by every theme (layout, sizing, states).
+ * Themes add the material (color, glass, shadows, motion) on top.
+ * Everything sits in @layer components, so your own classes and any
+ * Tailwind utility always win without !important.
+ */
+@layer theme, base, components, utilities;
+
+@layer components {
+  [data-theme] {
+    font-family: var(--fy-font-sans);
+    color: var(--fy-fg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Top layer floating surfaces (popovers). Undo the UA centering. */
+  [data-fy-floating] {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: visible;
+  }
+
+  /* Button */
+  [data-slot="button"],
+  [data-slot="popover-trigger"],
+  [data-slot="menu-trigger"],
+  [data-slot="dialog-trigger"],
+  [data-slot="dialog-close"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--fy-space-2);
+    height: 36px;
+    padding: 0 var(--fy-space-4);
+    font: inherit;
+    font-size: var(--fy-text-md);
+    font-weight: 550;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
+  [data-size="sm"] { height: 28px; padding: 0 var(--fy-space-3); font-size: var(--fy-text-sm); }
+  [data-size="lg"] { height: 44px; padding: 0 var(--fy-space-5); font-size: var(--fy-text-lg); }
+  [data-slot="button"]:disabled { cursor: not-allowed; opacity: 0.5; }
+
+  /* Card */
+  [data-slot="card"] { display: flex; flex-direction: column; gap: var(--fy-space-4); padding: var(--fy-space-6); }
+  [data-slot="card-header"] { display: flex; flex-direction: column; gap: var(--fy-space-1); }
+  [data-slot="card-title"] { margin: 0; font-size: var(--fy-text-lg); font-weight: 650; }
+  [data-slot="card-description"] { margin: 0; font-size: var(--fy-text-sm); color: var(--fy-fg-muted); }
+  [data-slot="card-footer"] { display: flex; justify-content: flex-end; gap: var(--fy-space-2); }
+
+  /* Text field */
+  [data-slot="field"] { display: flex; flex-direction: column; gap: 6px; }
+  [data-slot="field-label"] { font-size: var(--fy-text-sm); font-weight: 550; }
+  [data-slot="field-control"] { position: relative; display: flex; align-items: center; }
+  [data-slot="field-icon"] {
+    position: absolute; left: var(--fy-space-3); display: flex; color: var(--fy-fg-muted); pointer-events: none;
+  }
+  [data-slot="field-input"] {
+    width: 100%; height: 36px; padding: 0 var(--fy-space-3);
+    font: inherit; font-size: var(--fy-text-md); color: inherit; outline: none;
+  }
+  [data-slot="field-icon"] + [data-slot="field-input"] { padding-left: 34px; }
+  [data-slot="field-description"],
+  [data-slot="field-error"] { margin: 0; font-size: var(--fy-text-xs); }
+  [data-slot="field-description"] { color: var(--fy-fg-muted); }
+  [data-slot="field-error"] { color: var(--fy-danger); }
+
+  /* Checkbox + Switch share the hidden-native-input pattern */
+  [data-slot="checkbox"],
+  [data-slot="switch"] {
+    position: relative; display: inline-flex; align-items: center; gap: var(--fy-space-2);
+    font-size: var(--fy-text-md); cursor: pointer; user-select: none;
+  }
+  [data-slot="checkbox"][data-disabled],
+  [data-slot="switch"][data-disabled] { cursor: not-allowed; opacity: 0.5; }
+  [data-slot="checkbox-input"],
+  [data-slot="switch-input"] {
+    position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: inherit;
+  }
+  [data-slot="checkbox-box"] {
+    display: grid; place-items: center; flex: none; width: 18px; height: 18px;
+  }
+  [data-slot="checkbox-box"] > svg { grid-area: 1 / 1; width: 14px; height: 14px; opacity: 0; }
+  [data-slot="checkbox-input"]:checked:not(:indeterminate) + [data-slot="checkbox-box"] [data-slot="checkbox-check"],
+  [data-slot="checkbox-input"]:indeterminate + [data-slot="checkbox-box"] [data-slot="checkbox-dash"] { opacity: 1; }
+
+  [data-slot="switch-track"] { position: relative; flex: none; width: 40px; height: 24px; }
+  [data-slot="switch-thumb"] { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; }
+  [data-slot="switch-input"]:checked + [data-slot="switch-track"] [data-slot="switch-thumb"] { transform: translateX(16px); }
+
+  /* Slider */
+  [data-slot="slider"] {
+    appearance: none; -webkit-appearance: none; width: 100%; height: 20px; margin: 0; background: transparent; cursor: pointer;
+  }
+  [data-slot="slider"]::-webkit-slider-runnable-track { height: 6px; }
+  [data-slot="slider"]::-moz-range-track { height: 6px; }
+  [data-slot="slider"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -7px; }
+  [data-slot="slider"]::-moz-range-thumb { width: 20px; height: 20px; }
+  [data-slot="slider"]:disabled { cursor: not-allowed; opacity: 0.5; }
+
+  /* Select */
+  [data-slot="select"] { display: inline-flex; min-width: 180px; }
+  [data-slot="select-trigger"] {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--fy-space-2);
+    width: 100%; height: 36px; padding: 0 var(--fy-space-3); font: inherit; font-size: var(--fy-text-md);
+    color: inherit; text-align: left; cursor: pointer;
+  }
+  [data-slot="select-trigger"][data-placeholder] [data-slot="select-value"] { color: var(--fy-fg-muted); }
+  [data-slot="select-content"],
+  [data-slot="menu-content"] {
+    display: none; flex-direction: column; min-width: 180px; max-height: min(320px, 70vh);
+    padding: var(--fy-space-1); overflow-y: auto; outline: none; color: var(--fy-fg);
+  }
+  [data-slot="select-content"]:popover-open,
+  [data-slot="menu-content"]:popover-open { display: flex; }
+  [data-slot="select-item"],
+  [data-slot="menu-item"] {
+    display: flex; align-items: center; gap: var(--fy-space-2); min-height: 32px; padding: 0 var(--fy-space-3);
+    font-size: var(--fy-text-md); cursor: default; outline: none; user-select: none;
+  }
+  [data-slot="select-item-label"],
+  [data-slot="menu-item-label"] { flex: 1; }
+  [data-slot="select-item"][aria-disabled="true"],
+  [data-slot="menu-item"][aria-disabled="true"] { opacity: 0.45; }
+
+  /* Menu extras */
+  [data-slot="menu-item-icon"] { display: flex; }
+  [data-slot="menu-item-shortcut"] { font: inherit; font-size: var(--fy-text-xs); color: var(--fy-fg-muted); }
+  [data-slot="menu-separator"] { height: 1px; margin: var(--fy-space-1) var(--fy-space-2); }
+  [data-slot="menu-label"] { padding: 6px var(--fy-space-3) 2px; font-size: var(--fy-text-xs); font-weight: 600; color: var(--fy-fg-muted); }
+
+  /* Tabs */
+  [data-slot="tabs"] { display: flex; flex-direction: column; gap: var(--fy-space-3); }
+  [data-slot="tabs-list"] { display: inline-flex; align-self: flex-start; gap: 2px; padding: 3px; }
+  [data-slot="tabs-trigger"] {
+    height: 30px; padding: 0 var(--fy-space-4); border: 0; background: none; font: inherit;
+    font-size: var(--fy-text-sm); font-weight: 550; color: inherit; cursor: pointer;
+  }
+  [data-slot="tabs-trigger"]:disabled { cursor: not-allowed; opacity: 0.45; }
+  [data-slot="tabs-panel"] { outline: none; }
+
+  /* Popover + Tooltip */
+  [data-slot="popover-content"] { display: none; padding: var(--fy-space-4); min-width: 220px; color: var(--fy-fg); }
+  [data-slot="popover-content"]:popover-open { display: block; }
+  [data-slot="tooltip"] {
+    display: none; max-width: 260px; padding: 6px 10px; font-size: var(--fy-text-xs); pointer-events: none;
+  }
+  [data-slot="tooltip"]:popover-open { display: block; }
+
+  /* Dialog */
+  /* margin: auto restores UA centering that CSS resets (like Tailwind preflight) remove. */
+  [data-slot="dialog"] {
+    margin: auto; max-width: none; max-height: none; padding: 0; border: 0; background: transparent; color: var(--fy-fg);
+    overflow: visible;
+  }
+  [data-slot="dialog-panel"] {
+    position: relative; display: flex; flex-direction: column; gap: var(--fy-space-3);
+    width: min(440px, calc(100vw - 32px)); padding: var(--fy-space-6);
+  }
+  [data-slot="dialog-title"] { margin: 0; padding-right: var(--fy-space-6); font-size: var(--fy-text-xl); font-weight: 650; }
+  [data-slot="dialog-description"] { margin: 0; font-size: var(--fy-text-md); color: var(--fy-fg-muted); }
+  [data-slot="dialog-footer"] { display: flex; justify-content: flex-end; gap: var(--fy-space-2); margin-top: var(--fy-space-2); }
+  [data-slot="dialog-close-icon"] {
+    position: absolute; top: var(--fy-space-4); right: var(--fy-space-4); display: grid; place-items: center;
+    width: 28px; height: 28px; padding: 0; border: 0; color: var(--fy-fg-muted); cursor: pointer;
+  }
+
+  /* Toast */
+  [data-slot="toaster"] {
+    position: fixed; inset: auto; margin: 0; padding: 0; border: 0; background: none; overflow: visible;
+    display: flex; flex-direction: column; gap: var(--fy-space-2); width: min(360px, calc(100vw - 32px));
+  }
+  [data-slot="toaster"]:not(:popover-open) { display: none; }
+  [data-slot="toaster"][data-position^="top"] { top: var(--fy-space-4); }
+  [data-slot="toaster"][data-position^="bottom"] { bottom: var(--fy-space-4); flex-direction: column-reverse; }
+  [data-slot="toaster"][data-position$="left"] { left: var(--fy-space-4); }
+  [data-slot="toaster"][data-position$="right"] { right: var(--fy-space-4); }
+  [data-slot="toaster"][data-position$="center"] { left: 50%; translate: -50% 0; }
+  [data-slot="toast"] {
+    display: flex; align-items: flex-start; gap: var(--fy-space-3); padding: var(--fy-space-3) var(--fy-space-4);
+    color: var(--fy-fg);
+  }
+  [data-slot="toast-icon"] { flex: none; margin-top: 1px; }
+  [data-slot="toast-text"] { flex: 1; min-width: 0; }
+  [data-slot="toast-title"] { font-size: var(--fy-text-md); font-weight: 600; }
+  [data-slot="toast-description"] { margin-top: 2px; font-size: var(--fy-text-sm); color: var(--fy-fg-muted); }
+  [data-slot="toast-action"] {
+    flex: none; height: 26px; padding: 0 var(--fy-space-3); font: inherit; font-size: var(--fy-text-sm); font-weight: 600; cursor: pointer;
+  }
+  [data-slot="toast-close"] {
+    flex: none; display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 0;
+    background: none; color: var(--fy-fg-muted); cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-theme] *,
+    [data-theme] *::before,
+    [data-theme] *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
+  }
+}

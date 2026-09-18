@@ -1,22 +1,15 @@
 /// <reference types="vitest/config" />
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  // `npm run dev` serves the playground; `npm run build` bundles the library.
   root: "playground",
-  build: {
-    outDir: "../dist",
-    emptyOutDir: true,
-    lib: {
-      entry: "../src/index.ts",
-      formats: ["es"],
-      fileName: "fronty",
-      cssFileName: "fronty",
-    },
-  },
+  plugins: [react(), tailwindcss()],
   test: {
     root: ".",
-    include: ["tests/**/*.test.ts"],
-    environment: "node",
+    include: ["tests/**/*.test.{ts,tsx}"],
+    environment: "jsdom",
+    setupFiles: ["tests/setup.ts"],
   },
 });

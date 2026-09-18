@@ -1,7 +1,7 @@
 # fronty v1 design
 
 Date: 2026-09-18
-Status: approved direction, building
+Status: v1 (Now era, `liquid`) built
 
 ## What fronty is
 
@@ -25,13 +25,14 @@ A copy-paste React component library that brings old UI back to life with cool m
 
 ```
 registry/                 source of everything users can add
-  registry.json           manifest: items, files, deps between items
-  lib/cn.ts
-  hooks/                  use-anchor-position, use-roving-focus, use-controllable
+  lib/cn.ts, lib/refs.ts
+  hooks/                  use-anchor-position, use-list-navigation, use-controllable, use-popover
   icons/                  generated from icons/svg
   ui/                     one file per component
-  themes/base.css         shared resets + Tailwind bridge (@theme inline)
-  themes/now/liquid.css   generated variable block + hand written slot styles
+  themes/base.css         structure shared by every theme (layout, sizing, states)
+  themes/tailwind.css     optional Tailwind v4 bridge (@theme inline)
+  themes/now/liquid.css   hand written material, @imports liquid.tokens.css
+  themes/now/liquid.tokens.css   generated from tokens/liquid.json
 cli/                      the `fronty` bin (init, add, list)
 tokens/liquid.json        exported from Figma variables
 icons/svg/                exported from Figma icon components
@@ -44,11 +45,11 @@ The old Vite library build from the skeleton is removed; the package ships `dist
 
 ## CLI
 
-- `npx fronty init`: writes `fronty.json` (`{ "dir": "src/components/fronty", "theme": "now/liquid" }`), copies `lib/cn.ts`, `themes/base.css` and the chosen theme.
-- `npx fronty add <item...>`: resolves registry dependencies (for example `select` pulls `hooks/use-anchor-position` and `icons/chevron-down`), copies files keeping the `ui/ lib/ hooks/ icons/ themes/` structure so relative imports just work, and skips files that already exist unless `--overwrite`.
+- `npx fronty init`: writes `fronty.json` (`{ "dir": "src/components/fronty", "theme": "liquid" }`), copies `lib/cn.ts`, `themes/base.css`, `themes/tailwind.css` and the chosen theme.
+- `npx fronty add <item...>`: dependencies are not declared anywhere; the CLI follows each file's relative imports (and CSS `@import`s) through the registry, so `select` pulls `hooks/use-anchor-position`, `icons/chevron-down` and the rest automatically. Files keep the `ui/ lib/ hooks/ icons/ themes/` structure so relative imports just work. Existing files are skipped; `--overwrite` replaces only the items you named, never shared deps you may have edited.
 - `npx fronty list`: prints items grouped by kind.
 
-The user imports the CSS once: `@import "./components/fronty/themes/base.css"; @import "./components/fronty/themes/now/liquid.css";` and sets `data-theme="liquid"` on `<html>` or any subtree (themes can nest).
+The user imports the CSS once: `@import "./components/fronty/themes/base.css"; @import "./components/fronty/themes/now/liquid.css";` and sets `data-theme="liquid"` on `<html>` or any subtree.
 
 ## Theme contract
 
@@ -75,7 +76,7 @@ Light and dark both ship; dark follows `prefers-color-scheme` unless `data-mode=
 - **Menu**: trigger + popover menu, `menuitem` roles, roving focus, typeahead, closes on select. Context menu variant opens at the pointer.
 - **Dialog**: native `<dialog>` with `showModal()`; Escape and backdrop click close; returns focus.
 - **Popover**: Popover API, positioned by `useAnchorPosition` (flip + shift inside viewport).
-- **Tooltip**: `popover="hint"` when supported, else `manual`; opens on hover/focus after a delay.
+- **Tooltip**: `popover="manual"`, opened on hover (after a delay) and focus (right away), closed on leave, blur and Escape.
 - **Toast**: `toast()` function plus `<Toaster />` region (`aria-live="polite"`), auto dismiss, pause on hover.
 - **Card**: the glass surface, with header, title, description, body, footer parts.
 
@@ -89,4 +90,4 @@ Vitest + Testing Library in jsdom for behavior and a11y wiring of every componen
 
 ## Out of scope for v1
 
-Other themes, Code Connect, a docs website, RTL polish, form library integrations.
+Other themes, Code Connect, a docs website, RTL polish, form library integrations, nesting different themes inside each other (selectors are scoped with `:where([data-theme])` today; `@scope` can fence themes later).

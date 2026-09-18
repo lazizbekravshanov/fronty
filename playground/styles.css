@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@import "../registry/themes/base.css";
+@import "../registry/themes/now/liquid.css";
+@import "../registry/themes/tailwind.css";
+
+@source "../registry";
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--fy-bg);
+}
+
+/* A busy wallpaper so the glass has something to bend. */
+.wallpaper {
+  background:
+    radial-gradient(40vmax 40vmax at 8% 12%, #ff8a3d 0%, transparent 60%),
+    radial-gradient(38vmax 38vmax at 92% 20%, #2f7dff 0%, transparent 60%),
+    radial-gradient(30vmax 30vmax at 70% 88%, #19c3a3 0%, transparent 60%),
+    radial-gradient(26vmax 26vmax at 20% 90%, #d05cff 0%, transparent 60%),
+    var(--fy-bg);
+  background-attachment: fixed;
+}

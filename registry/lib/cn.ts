@@ -1,7 +1,11 @@
 export type ClassValue = string | false | null | undefined | Record<string, boolean | undefined>;
 
-/** Join class names, skipping falsy values. `{ active: true }` adds "active". */
-export function cx(...values: ClassValue[]): string {
+/**
+ * Join class names, skipping falsy values. `{ active: true }` adds "active".
+ * No tailwind-merge needed: fronty styles live in `@layer components`, so any
+ * utility class you pass always wins.
+ */
+export function cn(...values: ClassValue[]): string {
   const out: string[] = [];
   for (const v of values) {
     if (!v) continue;
