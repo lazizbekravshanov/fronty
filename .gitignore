@@ -21,3 +21,6 @@ secrets*
 .vscode/
 .idea/
 *.log
+
+# brainstorm mockups (local only)
+.superpowers/
