@@ -1,0 +1,91 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import ComponentDemo from "../../../components/ComponentDemo";
+import Docs from "../../../layouts/Docs.astro";
+import { components, type ComponentDoc } from "../../../data/components";
+
+export function getStaticPaths() {
+  return components.map((c) => ({ params: { slug: c.slug }, props: { doc: c } }));
+}
+
+const { doc } = Astro.props as { doc: ComponentDoc };
+const sources = import.meta.glob("../../../components/demos/*.tsx", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
+// Show imports the way they look in the user's project after `npx fronty add`.
+const source = (sources[`../../../components/demos/${doc.slug}.tsx`] ?? "").replaceAll("@fronty/", "@/components/fronty/");
+const index = components.findIndex((c) => c.slug === doc.slug);
+const prev = components[index - 1];
+const next = components[index + 1];
+---
+
+<Docs title={doc.name} description={`${doc.name}: ${doc.description} A copy-paste React component with Aqua and liquid glass themes.`}>
+  <p class="mb-1 text-sm font-semibold text-fy-fg-muted">Component · {doc.native}</p>
+  <h1>{doc.name}</h1>
+  <p class="lede">{doc.description}</p>
+
+  <div class="preview wallpaper not-prose my-6">
+    <ComponentDemo slug={doc.slug} client:visible />
+  </div>
+
+  <h2>Install</h2>
+  <CodeBlock lang="bash" code={`npx fronty add ${doc.add}`} />
+
+  <h2>Usage</h2>
+  <CodeBlock code={source} />
+
+  <h2>Props</h2>
+  <div class="table-wrap">
+    <table class="props">
+      <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+      <tbody>
+        {
+          doc.props.map((p) => (
+            <tr>
+              <td><code>{p.name}</code></td>
+              <td><code>{p.type}</code></td>
+              <td>{p.default ? <code>{p.default}</code> : "—"}</td>
+              <td>{p.description}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  {
+    doc.keyboard && (
+      <>
+        <h2>Keyboard</h2>
+        <div class="table-wrap">
+          <table class="props">
+            <thead><tr><th>Key</th><th>Does</th></tr></thead>
+            <tbody>
+              {doc.keyboard.map(([k, d]) => (
+                <tr><td><code>{k}</code></td><td>{d}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
+    )
+  }
+
+  {
+    doc.notes && (
+      <>
+        <h2>Notes</h2>
+        <ul>{doc.notes.map((n) => <li>{n}</li>)}</ul>
+      </>
+    )
+  }
+
+  <h2>Styling</h2>
+  <p>
+    Every part has a <code class="inline-code">data-slot</code> starting with <code class="inline-code">{doc.slug === "text-field" ? "field" : doc.slug}</code>, and state lives in <code class="inline-code">data-state</code>,
+    <code class="inline-code">data-variant</code> and friends. Pass any class to override; theme styles sit in a lower CSS layer, so yours win. See <a class="link" href="/docs/theming">Theming</a>.
+  </p>
+
+  <nav aria-label="Pager" class="mt-10 flex justify-between gap-4 text-sm">
+    {prev ? <a class="link" href={`/docs/components/${prev.slug}`}>← {prev.name}</a> : <span />}
+    {next ? <a class="link" href={`/docs/components/${next.slug}`}>{next.name} →</a> : <span />}
+  </nav>
+</Docs>

@@ -18,6 +18,7 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - run: npm run site:build
       - name: Generated files are up to date with tokens/ and icons/svg/
         run: |
           npm run tokens && npm run icons

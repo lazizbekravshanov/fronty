@@ -1,0 +1,45 @@
+---
+import CodeBlock from "../../components/CodeBlock.astro";
+import Docs from "../../layouts/Docs.astro";
+---
+
+<Docs title="Theming" description="How fronty themes work: eras, light and dark modes, design tokens, data-slot hooks and overriding styles.">
+  <h1>Theming</h1>
+  <p class="lede">One set of components, many eras. A theme is a CSS file; your markup never changes.</p>
+
+  <h2>Eras</h2>
+  <ul>
+    <li><strong>Y2K · aqua</strong> (default): gel, pinstripes, the blue popup button, midnight dark mode.</li>
+    <li><strong>Now · liquid</strong>: frosted glass, rim light, deep soft shadows.</li>
+    <li><strong>Vintage</strong> and <strong>Remix</strong>: coming next.</li>
+  </ul>
+
+  <h2>Modes</h2>
+  <p>
+    Without <code class="inline-code">data-mode</code>, themes follow the device. Set <code class="inline-code">data-mode="light"</code> or <code class="inline-code">"dark"</code> to lock one.
+  </p>
+
+  <h2>Tokens</h2>
+  <p>Every theme defines the same CSS variables, designed in Figma and generated into CSS. Change them anywhere:</p>
+  <CodeBlock lang="css" code={`[data-theme="aqua"] {
+  --fy-accent: #e8559b;      /* pink gel, why not */
+  --fy-radius-lg: 16px;
+}`} />
+  <ul>
+    <li>Color: <code class="inline-code">--fy-bg</code>, <code class="inline-code">fg</code>, <code class="inline-code">fg-muted</code>, <code class="inline-code">accent</code>, <code class="inline-code">accent-fg</code>, <code class="inline-code">danger</code>, <code class="inline-code">success</code>, <code class="inline-code">warning</code>, <code class="inline-code">border</code></li>
+    <li>Glass: <code class="inline-code">--fy-glass-tint</code>, <code class="inline-code">tint-strong</code>, <code class="inline-code">blur</code>, <code class="inline-code">saturate</code>, <code class="inline-code">highlight</code>, <code class="inline-code">edge</code>, <code class="inline-code">shadow</code></li>
+    <li>Shape and type: <code class="inline-code">--fy-radius-sm…full</code>, <code class="inline-code">--fy-space-1…8</code>, <code class="inline-code">--fy-text-xs…xl</code>, <code class="inline-code">--fy-font-sans</code>, <code class="inline-code">mono</code></li>
+    <li>Motion: <code class="inline-code">--fy-duration-fast</code>, <code class="inline-code">--fy-duration</code></li>
+  </ul>
+
+  <h2>Slots and state</h2>
+  <p>
+    Every part of every component has a <code class="inline-code">data-slot</code>, like <code class="inline-code">select-trigger</code>, <code class="inline-code">menu-item</code> or <code class="inline-code">dialog-panel</code>. State lives in data attributes. Style them from anywhere:
+  </p>
+  <CodeBlock lang="css" code={`[data-slot="tabs-trigger"][data-state="active"] { font-weight: 700; }
+[data-slot="toast"][data-variant="error"] { border-color: red; }`} />
+
+  <h2>Overriding with classes</h2>
+  <p>Theme styles live in <code class="inline-code">@layer components</code>. Your classes, Tailwind or not, always win without <code class="inline-code">!important</code>:</p>
+  <CodeBlock code={`<Button className="rounded-none px-8">Square</Button>`} />
+</Docs>

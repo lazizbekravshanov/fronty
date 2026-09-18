@@ -78,6 +78,7 @@ Tokens and icons are designed in the [fronty Figma file](https://www.figma.com/d
 
 ```bash
 npm install
+npm run site:dev   # the docs website, http://localhost:4321
 npm run dev        # playground with every component, http://localhost:5173
 npm test           # vitest: components, CLI, generators
 npm run typecheck
@@ -90,6 +91,7 @@ cli/        the fronty command (init, add, list)
 tokens/     design tokens pulled from Figma
 icons/svg/  icons pulled from Figma
 scripts/    token + icon generators, Figma export script
+site/       the docs website (Astro), deployed on Vercel
 playground/ local showcase, not shipped
 docs/specs/ design decisions
 ```

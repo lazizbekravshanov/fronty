@@ -1,0 +1,80 @@
+---
+import ThemeSwitcher from "../components/ThemeSwitcher";
+import "../styles/site.css";
+
+interface Props {
+  title: string;
+  description: string;
+  wide?: boolean;
+}
+const { title, description } = Astro.props;
+const fullTitle = title === "fronty" ? "fronty · old UI, brought back to life" : `${title} · fronty`;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const path = Astro.url.pathname;
+const nav = [
+  { href: "/docs", label: "Docs" },
+  { href: "/docs/components/button", label: "Components", match: "/docs/components" },
+  { href: "/themes", label: "Themes" },
+];
+---
+
+<!doctype html>
+<html lang="en" data-theme="aqua">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" />
+    <script is:inline>
+      // Apply the saved era and mode before first paint (no flash).
+      try {
+        const t = localStorage.getItem("fronty-theme");
+        const m = localStorage.getItem("fronty-mode");
+        if (t === "aqua" || t === "liquid") document.documentElement.dataset.theme = t;
+        if (m === "light" || m === "dark") document.documentElement.dataset.mode = m;
+      } catch {}
+    </script>
+  </head>
+  <body class="wallpaper text-fy-fg">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50">Skip to content</a>
+    <header class="site-header sticky top-0 z-40">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-3">
+        <div class="flex items-center gap-4 sm:gap-6">
+          <a href="/" class="text-xl font-bold tracking-tight text-fy-fg no-underline">fronty</a>
+          <nav aria-label="Main" class="flex items-center gap-4 sm:gap-5">
+            {
+              nav.map((n) => (
+                <a
+                  href={n.href}
+                  class="nav-link"
+                  aria-current={path.startsWith(n.match ?? n.href) && !(n.href === "/docs" && path.startsWith("/docs/components")) ? "page" : undefined}
+                >
+                  {n.label}
+                </a>
+              ))
+            }
+            <a href="https://github.com/lazizbekravshanov/fronty" class="nav-link hidden sm:inline">GitHub</a>
+          </nav>
+        </div>
+        <ThemeSwitcher client:load />
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="mx-auto max-w-6xl px-4 py-12 text-sm text-fy-fg-muted">
+      <p class="m-0">
+        fronty is MIT licensed. Built with fronty, on the web platform. <a class="link" href="https://github.com/lazizbekravshanov/fronty">Source on GitHub</a>.
+      </p>
+    </footer>
+  </body>
+</html>

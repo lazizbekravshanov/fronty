@@ -24,3 +24,8 @@ secrets*
 
 # brainstorm mockups (local only)
 .superpowers/
+
+# site build output
+site/dist/
+site/.astro/
+.vercel/

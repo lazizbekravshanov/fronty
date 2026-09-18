@@ -1,0 +1,48 @@
+---
+import Base from "./Base.astro";
+import { components } from "../data/components";
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, "");
+const guides = [
+  { href: "/docs", label: "Getting started" },
+  { href: "/docs/theming", label: "Theming" },
+];
+const all = [...guides, ...components.map((c) => ({ href: `/docs/components/${c.slug}`, label: c.name }))];
+---
+
+<Base title={title} description={description}>
+  <div class="mx-auto grid max-w-6xl gap-8 px-4 py-8 md:grid-cols-[220px_1fr]">
+    <aside>
+      <details class="panel p-4 md:hidden">
+        <summary class="cursor-pointer font-semibold">Menu</summary>
+        <ul class="m-0 mt-3 grid list-none grid-cols-2 gap-x-4 p-0">
+          {all.map((l) => (
+            <li><a href={l.href} class="nav-link block py-2" aria-current={path === l.href ? "page" : undefined}>{l.label}</a></li>
+          ))}
+        </ul>
+      </details>
+      <nav aria-label="Docs" class="sticky top-24 hidden md:block">
+        <p class="mb-2 text-xs font-semibold tracking-wide text-fy-fg-muted uppercase">Guides</p>
+        <ul class="m-0 mb-6 list-none p-0">
+          {guides.map((g) => (
+            <li><a href={g.href} class="nav-link block py-1" aria-current={path === g.href ? "page" : undefined}>{g.label}</a></li>
+          ))}
+        </ul>
+        <p class="mb-2 text-xs font-semibold tracking-wide text-fy-fg-muted uppercase">Components</p>
+        <ul class="m-0 list-none p-0">
+          {components.map((c) => (
+            <li><a href={`/docs/components/${c.slug}`} class="nav-link block py-1" aria-current={path === `/docs/components/${c.slug}` ? "page" : undefined}>{c.name}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </aside>
+    <article class="panel prose min-w-0 p-6 md:p-10">
+      <slot />
+    </article>
+  </div>
+</Base>
