@@ -13,6 +13,7 @@ import { useAnchorPosition, type Placement } from "../hooks/use-anchor-position"
 import { useListNavigation } from "../hooks/use-list-navigation";
 import { usePopover } from "../hooks/use-popover";
 import { cn } from "../lib/cn";
+import { pointerFocus } from "../lib/pointer-focus";
 
 interface MenuContext {
   open: boolean;
@@ -132,6 +133,7 @@ export function MenuItem({ onSelect, disabled, icon, variant = "default", classN
       data-variant={variant}
       className={className}
       onClick={activate}
+      {...pointerFocus}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();

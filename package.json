@@ -2,8 +2,28 @@
   "name": "fronty",
   "version": "0.1.0",
   "description": "Copy-paste React components that bring old UI back to life, from 1984 Mac to 2026 liquid glass.",
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "copy-paste",
+    "liquid-glass",
+    "retro",
+    "nostalgia",
+    "tailwind",
+    "design-system",
+    "cli"
+  ],
   "license": "MIT",
   "author": "Lazizbek Ravshanov",
+  "homepage": "https://github.com/lazizbekravshanov/fronty#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lazizbekravshanov/fronty.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lazizbekravshanov/fronty/issues"
+  },
   "type": "module",
   "bin": {
     "fronty": "./dist/cli/index.js"
@@ -19,7 +39,8 @@
     "icons": "node scripts/build-icons.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
   },
   "engines": {
     "node": ">=20"

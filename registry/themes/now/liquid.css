@@ -76,9 +76,6 @@
     border-color: var(--fy-glass-edge);
     box-shadow: var(--fy-rim), 0 1px 3px rgb(0 0 0 / 0.08);
   }
-  :where([data-theme="liquid"]) .fy-button[data-variant="secondary"]:hover:not(:disabled) {
-    background: var(--fy-sheen), var(--fy-glass-tint-strong);
-  }
   /* Primary: a colored gel with the Aqua shine on top. */
   :where([data-theme="liquid"]) .fy-button:is([data-variant="primary"], [data-variant="danger"]) {
     --fy-tone: var(--fy-accent);
@@ -90,15 +87,10 @@
       0 6px 18px -6px color-mix(in oklab, var(--fy-tone) 70%, transparent);
   }
   :where([data-theme="liquid"]) .fy-button[data-variant="danger"] { --fy-tone: var(--fy-danger); }
-  :where([data-theme="liquid"]) .fy-button:is([data-variant="primary"], [data-variant="danger"]):hover:not(:disabled) {
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.45), rgb(255 255 255 / 0.1) 50%, rgb(255 255 255 / 0) 51%),
-      var(--fy-tone);
-  }
   :where([data-theme="liquid"]) .fy-button:is([data-variant="primary"], [data-variant="danger"]):focus-visible {
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.45), var(--fy-ring);
   }
   :where([data-theme="liquid"]) .fy-button[data-variant="ghost"] { background: transparent; }
-  :where([data-theme="liquid"]) .fy-button[data-variant="ghost"]:hover:not(:disabled) { background: var(--fy-glass-tint); }
 
   /* ---------- Inputs (field, select trigger) ---------- */
   :where([data-theme="liquid"]) :is([data-slot="field-input"], [data-slot="select-trigger"]) {
@@ -128,12 +120,13 @@
     border-radius: 7px;
     transition: background-color var(--fy-duration-fast);
   }
-  :where([data-theme="liquid"]) :is([data-slot="select-item"], [data-slot="menu-item"]):is(:hover, :focus):not([aria-disabled="true"]) {
+  /* Mouse hover moves focus onto items (lib/pointer-focus), so :focus is the one highlight. */
+  :where([data-theme="liquid"]) :is([data-slot="select-item"], [data-slot="menu-item"]):focus:not([aria-disabled="true"]) {
     background: var(--fy-accent);
     color: var(--fy-accent-fg);
   }
-  :where([data-theme="liquid"]) [data-slot="menu-item"][data-variant="danger"]:not(:hover, :focus) { color: var(--fy-danger); }
-  :where([data-theme="liquid"]) [data-slot="menu-item"][data-variant="danger"]:is(:hover, :focus) { background: var(--fy-danger); }
+  :where([data-theme="liquid"]) [data-slot="menu-item"][data-variant="danger"]:not(:focus) { color: var(--fy-danger); }
+  :where([data-theme="liquid"]) [data-slot="menu-item"][data-variant="danger"]:focus { background: var(--fy-danger); }
   :where([data-theme="liquid"]) [data-slot="menu-separator"] { background: var(--fy-border); }
 
   /* ---------- Checkbox ---------- */
@@ -241,7 +234,6 @@
     border-radius: var(--fy-radius-full);
     background: color-mix(in oklab, var(--fy-fg) 7%, transparent);
   }
-  :where([data-theme="liquid"]) [data-slot="dialog-close-icon"]:hover { background: color-mix(in oklab, var(--fy-fg) 12%, transparent); }
   :where([data-theme="liquid"]) [data-slot="dialog-close-icon"]:focus-visible { outline: none; box-shadow: var(--fy-ring); }
 
   /* ---------- Toast ---------- */
@@ -259,7 +251,20 @@
     background: var(--fy-glass-tint);
   }
   :where([data-theme="liquid"]) [data-slot="toast-close"] { border-radius: var(--fy-radius-full); }
-  :where([data-theme="liquid"]) [data-slot="toast-close"]:hover { background: color-mix(in oklab, var(--fy-fg) 8%, transparent); }
+
+  /* ---------- Hover (real pointers only, so taps on touch screens never stick) ---------- */
+  @media (hover: hover) {
+    :where([data-theme="liquid"]) .fy-button[data-variant="secondary"]:hover:not(:disabled) {
+      background: var(--fy-sheen), var(--fy-glass-tint-strong);
+    }
+    :where([data-theme="liquid"]) .fy-button:is([data-variant="primary"], [data-variant="danger"]):hover:not(:disabled) {
+      background: linear-gradient(180deg, rgb(255 255 255 / 0.45), rgb(255 255 255 / 0.1) 50%, rgb(255 255 255 / 0) 51%),
+        var(--fy-tone);
+    }
+    :where([data-theme="liquid"]) .fy-button[data-variant="ghost"]:hover:not(:disabled) { background: var(--fy-glass-tint); }
+    :where([data-theme="liquid"]) [data-slot="dialog-close-icon"]:hover { background: color-mix(in oklab, var(--fy-fg) 12%, transparent); }
+    :where([data-theme="liquid"]) [data-slot="toast-close"]:hover { background: color-mix(in oklab, var(--fy-fg) 8%, transparent); }
+  }
 
   @keyframes fy-liquid-toast-in {
     from { opacity: 0; translate: 0 8px; scale: 0.97; }

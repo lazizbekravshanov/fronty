@@ -42,6 +42,20 @@ import { Button } from "@/components/fronty/ui/button";
 
 Button · TextField · Checkbox · Switch · Slider · Select · Tabs · Menu · Dialog · Popover · Tooltip · Toast · Card, plus 14 icons.
 
+## Mobile and touch
+
+Built for phones as much as laptops:
+
+- **44px touch targets** on touch screens. Controls keep their look; an invisible hit area grows around small buttons, tabs and close buttons. List items, fields, checkboxes and switches grow to 44px.
+- **No iOS zoom on focus**: fields use 16px text on touch devices.
+- **Hover effects only on real pointers**, so taps never leave a button stuck in its hover state.
+- **Tooltips**: hover (mouse), keyboard focus, or long press (touch). Don't put anything only in a tooltip.
+- Dialogs lock page scroll; toasts span the screen on phones; menus and lists don't scroll the page behind them.
+
+## Browser support
+
+Chrome and Edge 114+, Safari 17+, Firefox 125+ (all released by spring 2024). fronty relies on the Popover API and `<dialog>`; open/close animations use `@starting-style` and simply skip on browsers without it.
+
 ## Customizing
 
 - **Edit the file.** It's in your repo now.

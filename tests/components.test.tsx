@@ -177,19 +177,80 @@ describe("Popover", () => {
 });
 
 describe("Tooltip", () => {
-  it("shows on focus and describes the trigger", async () => {
+  const setup = () => {
     render(
-      <Tooltip content="Saves the file">
+      <Tooltip content="Saves the file" delay={300}>
         <Button>Save</Button>
       </Tooltip>,
     );
-    const b = screen.getByRole("button", { name: "Save" });
-    act(() => b.focus());
-    const tip = screen.getByRole("tooltip", { hidden: true });
+    return { b: screen.getByRole("button", { name: "Save" }), tip: screen.getByRole("tooltip", { hidden: true }) };
+  };
+
+  it("shows on keyboard focus and describes the trigger", async () => {
+    const { b, tip } = setup();
+    await userEvent.tab();
+    expect(document.activeElement).toBe(b);
     await waitFor(() => expect(isOpen(tip)).toBe(true));
     expect(b.getAttribute("aria-describedby")).toBe(tip.id);
-    act(() => b.blur());
+    await userEvent.tab();
     expect(isOpen(tip)).toBe(false);
+  });
+
+  it("mouse hover shows after the delay and hides on leave", () => {
+    vi.useFakeTimers();
+    const { b, tip } = setup();
+    fireEvent.pointerEnter(b, { pointerType: "mouse" });
+    act(() => vi.advanceTimersByTime(200));
+    expect(isOpen(tip)).toBe(false);
+    act(() => vi.advanceTimersByTime(150));
+    expect(isOpen(tip)).toBe(true);
+    fireEvent.pointerLeave(b, { pointerType: "mouse" });
+    expect(isOpen(tip)).toBe(false);
+    vi.useRealTimers();
+  });
+
+  it("touch: a tap does nothing, a long press shows it and it fades after release", () => {
+    vi.useFakeTimers();
+    const { b, tip } = setup();
+    fireEvent.pointerEnter(b, { pointerType: "touch" });
+    fireEvent.pointerDown(b, { pointerType: "touch" });
+    act(() => vi.advanceTimersByTime(100));
+    fireEvent.pointerUp(b, { pointerType: "touch" });
+    act(() => vi.advanceTimersByTime(2000));
+    expect(isOpen(tip)).toBe(false);
+
+    fireEvent.pointerDown(b, { pointerType: "touch" });
+    act(() => vi.advanceTimersByTime(600));
+    expect(isOpen(tip)).toBe(true);
+    fireEvent.pointerUp(b, { pointerType: "touch" });
+    act(() => vi.advanceTimersByTime(1000));
+    expect(isOpen(tip)).toBe(true);
+    act(() => vi.advanceTimersByTime(600));
+    expect(isOpen(tip)).toBe(false);
+    vi.useRealTimers();
+  });
+});
+
+describe("list items follow the mouse", () => {
+  it("hovering a menu item focuses it so only one item is highlighted", async () => {
+    render(
+      <Menu>
+        <MenuTrigger>Actions</MenuTrigger>
+        <MenuContent>
+          <MenuItem>Copy</MenuItem>
+          <MenuItem>Paste</MenuItem>
+        </MenuContent>
+      </Menu>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Actions" }));
+    await waitFor(() => expect(document.activeElement?.textContent).toBe("Copy"));
+    const paste = screen.getByRole("menuitem", { name: "Paste", hidden: true });
+    fireEvent.pointerMove(paste, { pointerType: "mouse" });
+    expect(document.activeElement).toBe(paste);
+    fireEvent.pointerLeave(paste, { pointerType: "mouse" });
+    expect(document.activeElement).toBe(screen.getByRole("menu", { hidden: true }));
+    fireEvent.pointerMove(paste, { pointerType: "touch" });
+    expect(document.activeElement).not.toBe(paste);
   });
 });
 

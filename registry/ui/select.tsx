@@ -6,6 +6,7 @@ import { usePopover } from "../hooks/use-popover";
 import { CheckIcon } from "../icons/check";
 import { ChevronDownIcon } from "../icons/chevron-down";
 import { cn } from "../lib/cn";
+import { pointerFocus } from "../lib/pointer-focus";
 
 export interface SelectOption {
   value: string;
@@ -132,6 +133,7 @@ export function Select({
             aria-selected={o.value === current}
             aria-disabled={o.disabled || undefined}
             onClick={() => choose(o)}
+            {...pointerFocus}
           >
             <span data-slot="select-item-label">{o.label}</span>
             {o.value === current && <CheckIcon data-slot="select-item-check" />}

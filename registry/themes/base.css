@@ -198,6 +198,51 @@
     background: none; color: var(--fy-fg-muted); cursor: pointer;
   }
 
+  /* ---------- Touch + small screens ---------- */
+  [data-theme] :is(button, label, [role="option"], [role="menuitem"], [role="tab"], [data-slot="slider"]) {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation; /* no double-tap zoom delay */
+  }
+  [data-slot="select-content"],
+  [data-slot="menu-content"] { overscroll-behavior: contain; }
+  /* A modal dialog should not let the page scroll behind it (iOS especially). */
+  :root:has([data-slot="dialog"][open]) { overflow: hidden; }
+
+  @media (pointer: coarse) {
+    /* 44px touch targets. Controls keep their look; an invisible ::after grows the hit area. */
+    .fy-button,
+    [data-slot="tabs-trigger"],
+    [data-slot="toast-action"],
+    [data-slot="toast-close"] { position: relative; }
+    :is(.fy-button, [data-slot="tabs-trigger"], [data-slot="dialog-close-icon"], [data-slot="toast-action"], [data-slot="toast-close"])::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: max(100%, 44px);
+      height: max(100%, 44px);
+      translate: -50% -50%;
+    }
+    /* Fields: taller, and 16px text so iOS Safari does not zoom in on focus. */
+    [data-slot="field-input"],
+    [data-slot="select-trigger"] { height: 44px; font-size: max(16px, var(--fy-text-md)); }
+    [data-slot="select-item"],
+    [data-slot="menu-item"] { min-height: 44px; }
+    [data-slot="checkbox"],
+    [data-slot="switch"] { min-height: 44px; }
+    [data-slot="slider"] { height: 44px; }
+    [data-slot="slider"]::-webkit-slider-thumb { width: 28px; height: 28px; margin-top: -11px; }
+    [data-slot="slider"]::-moz-range-thumb { width: 28px; height: 28px; }
+  }
+
+  @media (max-width: 480px) {
+    /* Toasts span the screen on phones instead of hugging a corner. */
+    [data-slot="toaster"][data-position] { left: var(--fy-space-4); right: var(--fy-space-4); width: auto; translate: none; }
+    [data-slot="dialog-panel"] { padding: var(--fy-space-5); }
+    [data-slot="dialog-footer"] { flex-direction: column-reverse; }
+    [data-slot="dialog-footer"] > * { width: 100%; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     [data-theme] *,
     [data-theme] *::before,

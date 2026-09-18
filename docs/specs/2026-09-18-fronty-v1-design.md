@@ -80,6 +80,17 @@ Light and dark both ship; dark follows `prefers-color-scheme` unless `data-mode=
 - **Toast**: `toast()` function plus `<Toaster />` region (`aria-live="polite"`), auto dismiss, pause on hover.
 - **Card**: the glass surface, with header, title, description, body, footer parts.
 
+## Mobile and touch
+
+- `@media (pointer: coarse)`: 44px hit areas (an invisible `::after` on small controls, real min-heights on list items, fields, checkboxes, switches), 16px field text so iOS does not zoom, bigger slider thumb.
+- `:hover` styles live inside `@media (hover: hover)`. Menu and listbox items take focus on mouse move (`lib/pointer-focus.ts`), so `:focus` is the single highlight for mouse and keyboard.
+- Tooltip: mouse hover, keyboard focus (`:focus-visible` only, so taps do not open it), touch long press (500ms) that hides 1.5s after release.
+- Dialog locks page scroll (`:root:has(dialog[open])`); toasts go full width under 480px; dialog footers stack.
+
+## Browser support
+
+Chrome/Edge 114+, Safari 17+, Firefox 125+ (Popover API baseline). Animations use `@starting-style` and degrade to instant.
+
 ## Icons (v1)
 
 check, chevron-down, chevron-up, chevron-right, close, plus, minus, search, more, info, success, warning, error, dot. 16px grid, 1.5px strokes, round caps, `currentColor`.
