@@ -12,7 +12,7 @@ const root = here.endsWith(join("dist", "cli")) ? join(here, "../../registry") :
 const HELP = `fronty: copy-paste components with era themes
 
 Usage
-  npx fronty init [--dir src/components/fronty] [--theme liquid]
+  npx fronty init [--dir src/components/fronty] [--theme aqua|liquid]
   npx fronty add <item...> [--overwrite]      e.g. add button select dialog
   npx fronty list
 

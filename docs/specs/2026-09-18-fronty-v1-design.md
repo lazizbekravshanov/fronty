@@ -1,7 +1,7 @@
 # fronty v1 design
 
 Date: 2026-09-18
-Status: v1 (Now era, `liquid`) built
+Status: `now/liquid` and `y2k/aqua` (default) built
 
 ## What fronty is
 
@@ -79,6 +79,10 @@ Light and dark both ship; dark follows `prefers-color-scheme` unless `data-mode=
 - **Tooltip**: `popover="manual"`, opened on hover (after a delay) and focus (right away), closed on leave, blur and Escape.
 - **Toast**: `toast()` function plus `<Toaster />` region (`aria-live="polite"`), auto dismiss, pause on hover.
 - **Card**: the glass surface, with header, title, description, body, footer parts.
+
+## Aqua (y2k/aqua)
+
+Gel material on buttons, select, tabs, checkbox and switch (a gloss layer, a bottom glow and a `--fy-tone` color, so one rule recolors any gel). Pinstripes under frosted glass on cards, dialogs and popovers. Select gets the blue ⇅ popup cap from CSS (the component's chevron is hidden). Pale yellow help tag tooltips, smoky dark toasts, a red gel close light on dialogs, blue glow focus ring. Dark mode is "midnight aqua" (graphite gel, dimmer pinstripes, same blue); `data-mode="light"` gives strict 2001 light only. Tokens: Figma collection `aqua` with Light and Dark modes, same names as `liquid` (a test enforces the contract).
 
 ## Mobile and touch
 

@@ -1,6 +1,7 @@
 // Figma plugin script that pulls fronty tokens and icons out of the Figma file.
 // Run it through the Figma MCP `use_figma` tool (or paste into a plugin console)
-// on file 8SPBcOobbk0U7U0uV01I2C, then save:
+// on file 8SPBcOobbk0U7U0uV01I2C once per theme (set COLLECTION to "liquid",
+// "aqua", ...), then save:
 //   result.tokens      -> tokens/<collection>.json
 //   result.icons[name] -> icons/svg/<name>.svg
 // and run `npm run tokens && npm run icons`.

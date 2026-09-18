@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-export const THEMES: Record<string, string> = { liquid: "now" };
+export const THEMES: Record<string, string> = { aqua: "y2k", liquid: "now" };
 
 type Value = string | number;
 export interface TokenFile {
@@ -17,6 +17,10 @@ const FONT_FALLBACKS: Record<string, string> = {
   sans: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
   mono: "ui-monospace, SFMono-Regular, Menlo, monospace",
 };
+/** Close relatives to try before the generic stack (Lucida Grande is Mac only). */
+const FONT_RELATIVES: Record<string, string> = {
+  "Lucida Grande": '"Lucida Sans Unicode", "Lucida Sans", ',
+};
 
 export function cssVarName(token: string): string {
   const [group, ...rest] = token.split("/");
@@ -26,7 +30,7 @@ export function cssVarName(token: string): string {
 
 export function cssValue(token: string, value: Value): string {
   const [group, key] = token.split("/");
-  if (group === "font") return `"${value}", ${FONT_FALLBACKS[key!] ?? "sans-serif"}`;
+  if (group === "font") return `"${value}", ${FONT_RELATIVES[value] ?? ""}${FONT_FALLBACKS[key!] ?? "sans-serif"}`;
   if (typeof value === "string") return value;
   if (group === "motion") return `${value}ms`;
   if (token === "glass/saturate") return `${value}%`;

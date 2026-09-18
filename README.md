@@ -6,15 +6,17 @@ fronty is a copy-paste React component library for the web with **era themes**. 
 
 | Era | Themes | Status |
 |---|---|---|
-| **Now** (2025+) | `liquid` (liquid glass) | ✅ v1 |
-| **Y2K** (2000 to 2012) | `aqua`, `aero` | next |
+| **Y2K** (2000 to 2012) | `aqua` ⭐ default (gel, pinstripes, midnight dark mode) | ✅ |
+| **Y2K** (2000 to 2012) | `aero` | next |
+| **Now** (2025+) | `liquid` (liquid glass) | ✅ |
 | **Vintage** (1984 to 1999) | `platinum`, `system` | planned |
 | **Remix** | `blend` (old structure, new glass) | planned |
 
 ## Quick start
 
 ```bash
-npx fronty init             # writes fronty.json, copies cn + theme css
+npx fronty init             # writes fronty.json, copies cn + theme css (aqua)
+npx fronty init --theme liquid
 npx fronty add button card dialog
 npx fronty list             # everything you can add
 ```
@@ -23,12 +25,13 @@ Then import the styles once and pick a theme:
 
 ```css
 @import "./components/fronty/themes/base.css";
-@import "./components/fronty/themes/now/liquid.css";
+@import "./components/fronty/themes/y2k/aqua.css";
 /* Tailwind v4? also: @import "./components/fronty/themes/tailwind.css"; */
 ```
 
 ```html
-<html data-theme="liquid">          <!-- follows the OS light/dark -->
+<html data-theme="aqua">                   <!-- follows the OS light/dark -->
+<html data-theme="aqua" data-mode="light">  <!-- strict 2001: always light -->
 <html data-theme="liquid" data-mode="dark">
 ```
 
@@ -65,7 +68,7 @@ Chrome and Edge 114+, Safari 17+, Firefox 125+ (all released by spring 2024). fr
 
 ## Design source: Figma
 
-Tokens and icons are designed in the [fronty Figma file](https://www.figma.com/design/8SPBcOobbk0U7U0uV01I2C) (variable collection `liquid`, page `Icons`) and generated into code:
+Tokens and icons are designed in the [fronty Figma file](https://www.figma.com/design/8SPBcOobbk0U7U0uV01I2C) (one variable collection per theme: `aqua`, `liquid`; page `Icons`) and generated into code:
 
 1. Pull with `scripts/figma/export.js` (via the Figma MCP or a plugin console) into `tokens/*.json` and `icons/svg/*.svg`.
 2. `npm run tokens` → `registry/themes/<era>/<theme>.tokens.css`

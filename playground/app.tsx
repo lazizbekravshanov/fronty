@@ -19,9 +19,12 @@ import { Toaster, toast } from "../registry/ui/toast";
 import { Tooltip } from "../registry/ui/tooltip";
 
 type Mode = "system" | "light" | "dark";
+type Theme = "aqua" | "liquid";
+const ERA: Record<Theme, string> = { aqua: "Y2K era", liquid: "Now era" };
 
 export function App() {
   const [mode, setMode] = useState<Mode>("system");
+  const [theme, setTheme] = useState<Theme>("aqua");
   const [volume, setVolume] = useState(64);
 
   const setDocMode = (m: Mode) => {
@@ -30,21 +33,34 @@ export function App() {
     else document.documentElement.setAttribute("data-mode", m);
   };
 
+  const setDocTheme = (t: Theme) => {
+    setTheme(t);
+    document.documentElement.setAttribute("data-theme", t);
+  };
+
   return (
     <div className="wallpaper min-h-screen px-4 py-10 text-fy-fg">
       <div className="mx-auto flex max-w-5xl flex-col gap-8">
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold text-fy-fg-muted">fronty · Now era</p>
-            <h1 className="m-0 text-4xl font-bold tracking-tight">liquid</h1>
+            <p className="text-sm font-semibold text-fy-fg-muted">fronty · {ERA[theme]}</p>
+            <h1 className="m-0 text-4xl font-bold tracking-tight">{theme}</h1>
           </div>
-          <Tabs value={mode} onValueChange={(v) => setDocMode(v as Mode)}>
-            <TabsList aria-label="Color mode">
-              <TabsTrigger value="system">System</TabsTrigger>
-              <TabsTrigger value="light">Light</TabsTrigger>
-              <TabsTrigger value="dark">Dark</TabsTrigger>
-            </TabsList>
-          </Tabs>
+          <div className="flex flex-wrap gap-3">
+            <Tabs value={theme} onValueChange={(v) => setDocTheme(v as Theme)}>
+              <TabsList aria-label="Theme">
+                <TabsTrigger value="aqua">Aqua</TabsTrigger>
+                <TabsTrigger value="liquid">Liquid</TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <Tabs value={mode} onValueChange={(v) => setDocMode(v as Mode)}>
+              <TabsList aria-label="Color mode">
+                <TabsTrigger value="system">System</TabsTrigger>
+                <TabsTrigger value="light">Light</TabsTrigger>
+                <TabsTrigger value="dark">Dark</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
         </header>
 
         <div className="grid gap-6 md:grid-cols-2">

@@ -9,7 +9,7 @@ export interface Config {
 }
 
 export const CONFIG_FILE = "fronty.json";
-export const DEFAULT_CONFIG: Config = { dir: "src/components/fronty", theme: "liquid" };
+export const DEFAULT_CONFIG: Config = { dir: "src/components/fronty", theme: "aqua" };
 
 export function readConfig(cwd: string): Config {
   const file = join(cwd, CONFIG_FILE);

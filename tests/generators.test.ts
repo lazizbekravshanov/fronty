@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { componentName, svgToTsx } from "../scripts/build-icons";
-import { cssValue, cssVarName, tokensToCss, type TokenFile } from "../scripts/build-tokens";
+import { THEMES, cssValue, cssVarName, tokensToCss, type TokenFile } from "../scripts/build-tokens";
 
 describe("build-tokens", () => {
   it("names and units", () => {
@@ -33,10 +33,22 @@ describe("build-tokens", () => {
     expect(css.match(/--fy-radius-sm/g)).toHaveLength(1);
   });
 
-  it("the committed liquid css is up to date with tokens/liquid.json", () => {
+  it.each(Object.entries(THEMES))("the committed %s css is up to date with its Figma tokens", (name, era) => {
     const root = join(import.meta.dirname, "..");
-    const json = JSON.parse(readFileSync(join(root, "tokens/liquid.json"), "utf8"));
-    expect(readFileSync(join(root, "registry/themes/now/liquid.tokens.css"), "utf8")).toBe(tokensToCss(json));
+    const json = JSON.parse(readFileSync(join(root, `tokens/${name}.json`), "utf8"));
+    expect(readFileSync(join(root, `registry/themes/${era}/${name}.tokens.css`), "utf8")).toBe(tokensToCss(json));
+  });
+
+  it("every theme defines the full token contract in both modes", () => {
+    const root = join(import.meta.dirname, "..");
+    const names = (n: string) =>
+      (JSON.parse(readFileSync(join(root, `tokens/${n}.json`), "utf8")) as TokenFile).tokens.map((t) => t.name).sort();
+    const [first, ...rest] = Object.keys(THEMES);
+    for (const other of rest) expect(names(other)).toEqual(names(first!));
+  });
+
+  it("gives Lucida Grande its Windows relatives", () => {
+    expect(cssValue("font/sans", "Lucida Grande")).toMatch(/^"Lucida Grande", "Lucida Sans Unicode"/);
   });
 });
 
